@@ -223,16 +223,47 @@ export default function App() {
 
       <footer className="page-footer reveal-section" data-reveal id="contato">
         <div className="page-footer__inner">
-          <div>
-            <strong>Meu Pato Cup 2</strong>
-            <p>Evento gamer com clima de final, comunidade forte e parceiros oficiais.</p>
+          <div className="page-footer__socials" aria-label="Redes sociais">
+            <a
+              className="page-footer__icon"
+              href="https://www.instagram.com/meupatocup/"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Instagram Meu Pato Cup"
+            >
+              <img src="/assets/icon-instagram.jfif" alt="" />
+            </a>
+            <a
+              className="page-footer__icon"
+              href="https://www.linkedin.com/feed/"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="LinkedIn"
+            >
+              <img src="/assets/icon-linkedin.png" alt="" />
+            </a>
+            <a
+              className="page-footer__icon"
+              href="https://wa.me/5511943944222"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="WhatsApp"
+            >
+              <img src="/assets/icon-whatsapp.png" alt="" />
+            </a>
           </div>
-          <nav className="page-footer__nav" aria-label="Rodape">
+
+          <div className="page-footer__links">
             <a href="#inicio">Inicio</a>
             <a href="#primeira-edicao">1a edicao</a>
             <a href="#segunda-edicao">2a edicao</a>
             <a href="#ingressos">Patrocinadores</a>
-          </nav>
+          </div>
+
+          <div className="page-footer__meta">
+            <span>Meu Pato Cup 2</span>
+            <span>Developer Lucas A Pires</span>
+          </div>
         </div>
       </footer>
     </div>

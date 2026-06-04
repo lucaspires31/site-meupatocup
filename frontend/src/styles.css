@@ -380,7 +380,7 @@ input {
 }
 
 .first-block {
-  grid-template-columns: 0.9fr 1.1fr;
+  grid-template-columns: 1.12fr 0.88fr;
   align-items: center;
 }
 
@@ -393,7 +393,9 @@ input {
 .gallery-block {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 10px;
+  max-width: 560px;
+  justify-self: end;
 }
 
 .gallery-block figure {
@@ -405,11 +407,11 @@ input {
 
 .gallery-large {
   grid-column: 1 / -1;
-  min-height: 110px;
+  min-height: 88px;
 }
 
 .gallery-small {
-  min-height: 92px;
+  min-height: 74px;
 }
 
 .gallery-block img {
@@ -790,8 +792,9 @@ input {
 
 .page-footer__inner {
   display: flex;
-  justify-content: space-between;
-  gap: 24px;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
   padding: 22px 18px;
   border: 1px solid var(--stroke);
   border-radius: 22px;
@@ -803,27 +806,57 @@ input {
     0 14px 36px rgba(0, 0, 0, 0.2);
 }
 
-.page-footer__inner strong {
-  display: block;
-  margin-bottom: 8px;
-  font-family: "Anton", sans-serif;
-  font-size: 1.7rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.page-footer__inner p {
-  margin: 0;
-  max-width: 48ch;
-  color: rgba(255, 255, 255, 0.68);
-}
-
-.page-footer__nav {
+.page-footer__socials {
   display: flex;
   align-items: center;
-  gap: 18px;
+  justify-content: center;
+  gap: 14px;
+}
+
+.page-footer__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #07111d;
+  font-weight: 800;
+  font-size: 0.88rem;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.page-footer__icon img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.page-footer__icon:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.28);
+}
+
+.page-footer__links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
   flex-wrap: wrap;
   color: rgba(255, 255, 255, 0.72);
+  font-size: 0.92rem;
+}
+
+.page-footer__meta {
+  display: grid;
+  gap: 4px;
+  justify-items: center;
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 0.84rem;
   text-transform: uppercase;
 }
 
@@ -1004,15 +1037,16 @@ input {
   }
 
   .gallery-block {
-    gap: 18px;
+    gap: 14px;
+    max-width: 500px;
   }
 
   .gallery-large {
-    min-height: 168px;
+    min-height: 124px;
   }
 
   .gallery-small {
-    min-height: 122px;
+    min-height: 94px;
   }
 
   .second-block {
@@ -1078,7 +1112,6 @@ input {
 
 @media (max-width: 699px) {
   .page-footer__inner {
-    flex-direction: column;
     padding: 18px 16px;
   }
 }
