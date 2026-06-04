@@ -25,6 +25,7 @@ function HeroLogo() {
 export default function App() {
   useEffect(() => {
     const elements = document.querySelectorAll("[data-reveal]");
+    const hero = document.querySelector(".hero-panel");
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -43,7 +44,40 @@ export default function App() {
 
     elements.forEach((element) => observer.observe(element));
 
-    return () => observer.disconnect();
+    function handlePointerMove(event) {
+      if (!hero) {
+        return;
+      }
+
+      const bounds = hero.getBoundingClientRect();
+      const x = (event.clientX - bounds.left) / bounds.width;
+      const y = (event.clientY - bounds.top) / bounds.height;
+
+      hero.style.setProperty("--hero-mouse-x", `${x}`);
+      hero.style.setProperty("--hero-mouse-y", `${y}`);
+      hero.style.setProperty("--hero-tilt-x", `${(x - 0.5) * 18}px`);
+      hero.style.setProperty("--hero-tilt-y", `${(y - 0.5) * 14}px`);
+    }
+
+    function resetPointer() {
+      if (!hero) {
+        return;
+      }
+
+      hero.style.setProperty("--hero-mouse-x", "0.5");
+      hero.style.setProperty("--hero-mouse-y", "0.5");
+      hero.style.setProperty("--hero-tilt-x", "0px");
+      hero.style.setProperty("--hero-tilt-y", "0px");
+    }
+
+    hero?.addEventListener("pointermove", handlePointerMove);
+    hero?.addEventListener("pointerleave", resetPointer);
+
+    return () => {
+      observer.disconnect();
+      hero?.removeEventListener("pointermove", handlePointerMove);
+      hero?.removeEventListener("pointerleave", resetPointer);
+    };
   }, []);
 
   return (
@@ -82,6 +116,8 @@ export default function App() {
           <div className="hero-panel__fx hero-panel__fx--right" aria-hidden="true" />
           <div className="hero-panel__spark hero-panel__spark--one" aria-hidden="true" />
           <div className="hero-panel__spark hero-panel__spark--two" aria-hidden="true" />
+          <div className="hero-panel__mesh" aria-hidden="true" />
+          <div className="hero-panel__grain" aria-hidden="true" />
 
           <div className="hero-copy">
             <span className="section-tag">Vem ai</span>
@@ -185,8 +221,19 @@ export default function App() {
         <TicketForm />
       </main>
 
-      <footer className="page-footer" id="contato">
-        <span>Meu Pato Cup</span>
+      <footer className="page-footer reveal-section" data-reveal id="contato">
+        <div className="page-footer__inner">
+          <div>
+            <strong>Meu Pato Cup 2</strong>
+            <p>Evento gamer com clima de final, comunidade forte e parceiros oficiais.</p>
+          </div>
+          <nav className="page-footer__nav" aria-label="Rodape">
+            <a href="#inicio">Inicio</a>
+            <a href="#primeira-edicao">1a edicao</a>
+            <a href="#segunda-edicao">2a edicao</a>
+            <a href="#ingressos">Patrocinadores</a>
+          </nav>
+        </div>
       </footer>
     </div>
   );

@@ -11,6 +11,10 @@
   --accent: #ffcb05;
   --accent-strong: #ffc300;
   --danger: #ff8686;
+  --hero-mouse-x: 0.5;
+  --hero-mouse-y: 0.5;
+  --hero-tilt-x: 0px;
+  --hero-tilt-y: 0px;
 }
 
 * {
@@ -149,15 +153,25 @@ input {
 
 .reveal-section {
   opacity: 0;
-  transform: translateY(26px);
+  transform: translateY(32px) scale(0.985);
+  filter: blur(10px);
+  clip-path: inset(0 0 18% 0 round 20px);
   transition:
-    opacity 0.75s ease,
-    transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+    opacity 0.85s ease,
+    transform 0.95s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.95s ease,
+    clip-path 0.95s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .reveal-section.is-visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+  clip-path: inset(0 0 0 0 round 20px);
+}
+
+.reveal-section--card {
+  transform: translateY(38px) scale(0.94) rotateX(10deg);
 }
 
 .rules-banner {
@@ -189,10 +203,13 @@ input {
     linear-gradient(90deg, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.83) 45%, rgba(0, 0, 0, 0.46) 100%),
     radial-gradient(circle at 78% 25%, rgba(255, 203, 5, 0.18), transparent 20%),
     url("/assets/hero-background.png") center/cover;
+  isolation: isolate;
 }
 
 .hero-panel__fx,
-.hero-panel__spark {
+.hero-panel__spark,
+.hero-panel__mesh,
+.hero-panel__grain {
   position: absolute;
   pointer-events: none;
 }
@@ -244,6 +261,29 @@ input {
   top: 19%;
   width: 140px;
   animation-delay: -4s;
+}
+
+.hero-panel__mesh {
+  inset: -10%;
+  background:
+    radial-gradient(circle at calc(var(--hero-mouse-x) * 100%) calc(var(--hero-mouse-y) * 100%), rgba(255, 210, 77, 0.16), transparent 18%),
+    linear-gradient(120deg, transparent 0%, rgba(255, 193, 7, 0.08) 38%, transparent 62%),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 140px);
+  mix-blend-mode: screen;
+  opacity: 0.7;
+  transform: translate3d(var(--hero-tilt-x), var(--hero-tilt-y), 0);
+  transition: transform 0.25s ease-out;
+}
+
+.hero-panel__grain {
+  inset: 0;
+  opacity: 0.18;
+  background-image:
+    radial-gradient(circle, rgba(255, 224, 130, 0.9) 0 1px, transparent 1px),
+    radial-gradient(circle, rgba(255, 196, 0, 0.6) 0 1px, transparent 1px);
+  background-size: 26px 26px, 42px 42px;
+  background-position: 0 0, 14px 18px;
+  animation: grainFloat 18s linear infinite;
 }
 
 .hero-watermark {
@@ -323,6 +363,8 @@ input {
 .hero-logo-image {
   width: min(100%, 430px);
   filter: drop-shadow(0 26px 38px rgba(0, 0, 0, 0.35));
+  transform: translate3d(calc(var(--hero-tilt-x) * -0.22), calc(var(--hero-tilt-y) * -0.22), 0);
+  transition: transform 0.25s ease-out;
 }
 
 .content-block {
@@ -363,11 +405,11 @@ input {
 
 .gallery-large {
   grid-column: 1 / -1;
-  min-height: 138px;
+  min-height: 110px;
 }
 
 .gallery-small {
-  min-height: 112px;
+  min-height: 92px;
 }
 
 .gallery-block img {
@@ -377,7 +419,7 @@ input {
 
 .second-block {
   position: relative;
-  min-height: 420px;
+  min-height: 470px;
   overflow: hidden;
   background: linear-gradient(180deg, rgba(12, 13, 17, 0.98), rgba(8, 8, 10, 0.98));
 }
@@ -424,6 +466,16 @@ input {
   display: grid;
   align-content: space-between;
   min-height: 100%;
+  max-width: 620px;
+}
+
+.second-block__copy h2 {
+  font-size: clamp(2.7rem, 8vw, 4.6rem);
+}
+
+.second-block__copy p {
+  max-width: 52ch;
+  font-size: 1.02rem;
 }
 
 .feature-row {
@@ -595,14 +647,14 @@ input {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 138px;
-  padding: 14px 16px;
+  min-height: 172px;
+  padding: 20px 22px;
   background: rgba(255, 255, 255, 0.03);
 }
 
 .sponsor-card__image img {
   max-width: 100%;
-  max-height: 78px;
+  max-height: 116px;
   width: auto;
   height: auto;
   object-fit: contain;
@@ -732,8 +784,46 @@ input {
 }
 
 .page-footer {
-  padding: 20px 0 24px;
-  color: rgba(255, 255, 255, 0.35);
+  margin-top: 10px;
+  padding: 0 0 28px;
+}
+
+.page-footer__inner {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 22px 18px;
+  border: 1px solid var(--stroke);
+  border-radius: 22px;
+  background:
+    linear-gradient(180deg, rgba(16, 17, 21, 0.98), rgba(8, 9, 12, 0.98)),
+    radial-gradient(circle at left top, rgba(255, 203, 5, 0.1), transparent 24%);
+  box-shadow:
+    inset 0 0 38px rgba(255, 255, 255, 0.015),
+    0 14px 36px rgba(0, 0, 0, 0.2);
+}
+
+.page-footer__inner strong {
+  display: block;
+  margin-bottom: 8px;
+  font-family: "Anton", sans-serif;
+  font-size: 1.7rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.page-footer__inner p {
+  margin: 0;
+  max-width: 48ch;
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.page-footer__nav {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  color: rgba(255, 255, 255, 0.72);
   text-transform: uppercase;
 }
 
@@ -767,6 +857,20 @@ input {
   }
 }
 
+@keyframes grainFloat {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(-18px, 14px, 0);
+  }
+
+  100% {
+    transform: translate3d(12px, -10px, 0);
+  }
+}
+
 @media (min-width: 700px) {
   .top-header,
   .page-sections,
@@ -784,12 +888,12 @@ input {
   }
 
   .sponsor-card__image {
-    min-height: 150px;
-    padding: 16px 18px;
+    min-height: 182px;
+    padding: 20px 22px;
   }
 
   .sponsor-card__image img {
-    max-height: 86px;
+    max-height: 124px;
   }
 }
 
@@ -904,15 +1008,15 @@ input {
   }
 
   .gallery-large {
-    min-height: 220px;
+    min-height: 168px;
   }
 
   .gallery-small {
-    min-height: 150px;
+    min-height: 122px;
   }
 
   .second-block {
-    min-height: 500px;
+    min-height: 590px;
   }
 
   .second-block__media {
@@ -950,12 +1054,12 @@ input {
   }
 
   .sponsor-card__image {
-    min-height: 122px;
-    padding: 14px 18px;
+    min-height: 170px;
+    padding: 18px 22px;
   }
 
   .sponsor-card__image img {
-    max-height: 66px;
+    max-height: 118px;
   }
 
   .ticket-payment {
@@ -965,5 +1069,16 @@ input {
   .payment-box {
     grid-template-columns: auto 1fr;
     align-items: center;
+  }
+
+  .page-footer__inner {
+    padding: 28px 32px;
+  }
+}
+
+@media (max-width: 699px) {
+  .page-footer__inner {
+    flex-direction: column;
+    padding: 18px 16px;
   }
 }

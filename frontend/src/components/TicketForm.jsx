@@ -42,7 +42,7 @@ export default function TicketForm() {
         {sponsors.map((sponsor, index) => (
           <article
             key={sponsor.name}
-            className="sponsor-card reveal-section"
+            className="sponsor-card reveal-section reveal-section--card"
             data-reveal
             style={{ transitionDelay: `${index * 90}ms` }}
           >
