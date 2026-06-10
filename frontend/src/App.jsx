@@ -1,244 +1,142 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TicketForm from "./components/TicketForm";
 
-const pages = [
-  { id: "home", label: "Home" },
-  { id: "cup", label: "Meu Pato Cup" },
-  { id: "store", label: "Loja" },
-  { id: "proclub", label: "Meu Pato Cup Pro Club" }
-];
-
-const homeCards = [
+const editionGallery = [
   {
-    id: "cup",
-    page: "cup",
-    kicker: "Competicao",
+    image: "/assets/edition-1-a.png",
     title: "Meu Pato Cup",
-    description: "Entre nas edicoes, fotos, premiacoes e espacos para parceiros.",
-    tone: "gold"
+    description: "Entre para ver as edicoes, patrocinadores, fotos e blocos do campeonato.",
+    target: "cup"
   },
   {
-    id: "store",
-    page: "store",
-    kicker: "Colecao",
-    title: "Loja em breve",
-    description: "Pagina reservada para produtos, estilo e futuras novidades da marca.",
-    tone: "carbon"
+    image: "/assets/edition-1-b.png",
+    title: "Loja",
+    description: "Espaco reservado para a loja oficial do Meu Pato. Por enquanto fica em breve.",
+    target: "store"
   },
   {
-    id: "proclub",
-    page: "proclub",
-    kicker: "Modo clube",
-    title: "Pro Club em breve",
-    description: "Nova frente do Meu Pato com espaco proprio dentro do site.",
-    tone: "field"
-  },
-  {
-    id: "about",
-    page: "home",
-    kicker: "Comunidade",
-    title: "Sobre o Meu Pato",
-    description: "Conheca a ideia por tras do projeto e acompanhe essa evolucao.",
-    tone: "flare",
-    target: "about"
+    image: "/assets/edition-1-c.png",
+    title: "Pro Club",
+    description: "Nova frente do projeto com area propria dentro do site. Em breve.",
+    target: "proclub"
   }
 ];
 
-const firstEditionBlocks = [
-  { label: "Premiacoes", value: "Preencher com os premios da 1a edicao" },
-  { label: "Sorteios", value: "Espaco pronto para divulgar os sorteios" },
-  { label: "Fotos", value: "Galeria principal da edicao" },
-  { label: "Tabela", value: "Fica como extra para a proxima etapa" }
+const featureItems = [
+  { key: "prize", label: "Premiacoes", value: "Preencher depois" },
+  { key: "date", label: "Sorteios", value: "Preencher depois" },
+  { key: "place", label: "Fotos", value: "Preencher depois" },
+  { key: "versus", label: "Tabela", value: "Extra para depois" }
 ];
 
-const secondEditionBlocks = [
-  { label: "Premiacoes", value: "Em branco por enquanto" },
-  { label: "Sorteios", value: "Em branco por enquanto" },
-  { label: "Fotos", value: "Em branco por enquanto" },
-  { label: "Tabela", value: "Fica para depois" }
+const secondEditionItems = [
+  { key: "prize", label: "Premiacoes", value: "Em branco" },
+  { key: "date", label: "Sorteios", value: "Em branco" },
+  { key: "place", label: "Fotos", value: "Em branco" },
+  { key: "versus", label: "Tabela", value: "Em branco" }
 ];
 
-const firstEditionSponsors = [
-  { name: "Patrocinador 01", handle: "@patrocinador01" },
-  { name: "Patrocinador 02", handle: "@patrocinador02" },
-  { name: "Patrocinador 03", handle: "@patrocinador03" },
-  { name: "Patrocinador 04", handle: "@patrocinador04" }
-];
-
-const secondEditionSponsors = [
-  { name: "Espaco reservado", handle: "Link depois" },
-  { name: "Espaco reservado", handle: "Link depois" },
-  { name: "Espaco reservado", handle: "Link depois" }
-];
-
-function LogoMark() {
-  return (
-    <div className="brand-mark">
-      <span className="brand-pill">MPC</span>
-      <span className="brand-name">Meu Pato</span>
-    </div>
-  );
+function HeaderLogo() {
+  return <img className="brand-logo" src="/assets/logo-crop.png" alt="Meu Pato Cup" />;
 }
 
-function HeroButton({ children, onClick, outline = false }) {
-  return (
-    <button className={outline ? "primary-button outline" : "primary-button"} onClick={onClick}>
-      {children}
-    </button>
-  );
-}
-
-function Header({ currentPage, onNavigate, mobileOpen, onToggleMobile }) {
-  return (
-    <header className="site-header">
-      <div className="topbar">
-        <button className="brand-button" onClick={() => onNavigate("home")}>
-          <LogoMark />
-        </button>
-
-        <nav className="nav-links">
-          {pages.map((page) => (
-            <button
-              key={page.id}
-              className={currentPage === page.id ? "nav-link active" : "nav-link"}
-              onClick={() => onNavigate(page.id)}
-            >
-              {page.label}
-            </button>
-          ))}
-        </nav>
-
-        <div className="top-actions">
-          <HeroButton onClick={() => onNavigate("cup")}>Ver Cup</HeroButton>
-          <button
-            className={mobileOpen ? "menu-button is-open" : "menu-button"}
-            onClick={onToggleMobile}
-            aria-label="Abrir menu"
-          >
-            <span />
-            <span />
-            <span />
-          </button>
-        </div>
-      </div>
-
-      {mobileOpen ? (
-        <div className="mobile-nav">
-          {pages.map((page) => (
-            <button
-              key={page.id}
-              className={currentPage === page.id ? "mobile-link active" : "mobile-link"}
-              onClick={() => onNavigate(page.id)}
-            >
-              {page.label}
-            </button>
-          ))}
-        </div>
-      ) : null}
-    </header>
-  );
+function HeroLogo() {
+  return <img className="hero-logo-image" src="/assets/logo-crop.png" alt="Logo Meu Pato Cup" />;
 }
 
 function HomePage({ onNavigate, onScrollToAbout }) {
   return (
     <>
-      <section className="hero">
-        <div className="hero-content">
-          <div className="hero-copy-block">
-            <span className="section-kicker">Site oficial</span>
-            <h1>Meu Pato, Cup, loja e Pro Club no mesmo lugar.</h1>
-            <p className="hero-copy">
-              Mantive a energia do layout atual e transformei o projeto em uma base
-              principal da marca, com paginas internas, carrossel arrastavel e um
-              cadastro para quem quiser acompanhar as novidades.
-            </p>
-            <div className="hero-cta-row">
-              <HeroButton onClick={() => onNavigate("cup")}>Entrar no Meu Pato Cup</HeroButton>
-              <HeroButton outline onClick={onScrollToAbout}>
-                Sobre o Meu Pato
-              </HeroButton>
-            </div>
-          </div>
+      <section className="hero-panel reveal-section is-visible" id="inicio">
+        <div className="hero-watermark">FIFA</div>
+        <div className="hero-panel__fx hero-panel__fx--left" aria-hidden="true" />
+        <div className="hero-panel__fx hero-panel__fx--right" aria-hidden="true" />
+        <div className="hero-panel__spark hero-panel__spark--one" aria-hidden="true" />
+        <div className="hero-panel__spark hero-panel__spark--two" aria-hidden="true" />
+        <div className="hero-panel__mesh" aria-hidden="true" />
+        <div className="hero-panel__grain" aria-hidden="true" />
 
-          <div className="hero-card hero-shield-card">
-            <span className="hero-badge">Base principal</span>
-            <h2>Visual forte, navegacao simples e foco no responsivo</h2>
-            <p>
-              O site agora funciona como porta de entrada para tudo do Meu Pato,
-              sem perder o estilo escuro com destaque dourado.
-            </p>
-            <div className="hero-meta">
-              <span>Home</span>
-              <span>Meu Pato Cup</span>
-              <span>Loja</span>
-              <span>Pro Club</span>
-            </div>
+        <div className="hero-copy">
+          <span className="section-tag">Meu Pato</span>
+          <h1 className="hero-heading">
+            <span>O site</span>
+            <strong>oficial</strong>
+          </h1>
+          <p>
+            Mantive a base visual do site original e agora a home vira a entrada
+            principal do Meu Pato, com acesso para Cup, Loja, Pro Club e cadastro
+            de novidades.
+          </p>
+
+          <div className="hero-buttons">
+            <button className="primary-button" onClick={() => onNavigate("cup")}>
+              Meu Pato Cup
+            </button>
+            <button className="secondary-button" onClick={onScrollToAbout}>
+              Sobre nos
+            </button>
           </div>
+        </div>
+
+        <div className="hero-logo">
+          <HeroLogo />
         </div>
       </section>
 
-      <section className="content-section">
-        <div className="section-heading wide">
-          <div>
-            <span className="section-kicker">Pagina inicial</span>
-            <h2>Cards arrastaveis para entrar em cada area</h2>
-          </div>
+      <section className="content-block first-block reveal-section" data-reveal id="home-cards">
+        <div className="block-copy">
+          <span className="section-tag">Pagina inicial</span>
+          <h2>Arraste para o lado</h2>
           <p>
-            Os blocos abaixo ja funcionam como vitrine principal do site. Depois a
-            gente so troca os links e as imagens reais quando voce mandar.
+            Aqui ficam as imagens clicaveis da home. Mantive as imagens da base
+            antiga e adaptei esse bloco para servir como carrossel horizontal.
           </p>
+          <button className="outline-button" onClick={onScrollToAbout}>
+            Ver sobre o Meu Pato
+          </button>
         </div>
 
-        <div className="card-rail" role="list">
-          {homeCards.map((card) => (
+        <div className="gallery-slider">
+          {editionGallery.map((item) => (
             <button
-              key={card.id}
-              className={`home-card ${card.tone}`}
-              role="listitem"
-              onClick={() => {
-                if (card.target === "about") {
-                  onScrollToAbout();
-                  return;
-                }
-
-                onNavigate(card.page);
-              }}
+              key={item.title}
+              className="gallery-slide"
+              onClick={() => onNavigate(item.target)}
             >
-              <span className="card-kicker">{card.kicker}</span>
-              <strong>{card.title}</strong>
-              <p>{card.description}</p>
-              <span className="card-link">Abrir pagina</span>
+              <img src={item.image} alt={item.title} />
+              <div className="gallery-slide__overlay">
+                <strong>{item.title}</strong>
+                <p>{item.description}</p>
+              </div>
             </button>
           ))}
         </div>
       </section>
 
-      <section className="content-section" id="about">
-        <div className="edition-grid about-grid">
-          <article className="story-card about-main">
-            <span className="section-kicker">Sobre o Meu Pato</span>
-            <h2>Uma marca feita para juntar estilo, resenha e competicao</h2>
-            <p>
-              O Meu Pato nasceu como uma identidade propria dentro da comunidade,
-              criando um espaco com personalidade para eventos, conexoes, fotos,
-              futuras colecoes e novas frentes do projeto.
-            </p>
-            <p>
-              Esse site vira a base central para acompanhar tudo: as edicoes da
-              cup, a futura loja, o Pro Club e as novidades que ainda vao entrar.
-            </p>
-          </article>
+      <section className="content-block about-block reveal-section" data-reveal id="about">
+        <div className="block-copy">
+          <span className="section-tag">Sobre nos</span>
+          <h2>O Meu Pato e mais do que um evento</h2>
+          <p>
+            O Meu Pato nasceu para juntar competicao, identidade visual, resenha e
+            comunidade em um projeto com cara propria. Esse site agora vira a base
+            central para acompanhar tudo o que a marca for lancando.
+          </p>
+          <p>
+            Aqui vai dar para acompanhar as edicoes da cup, os patrocinadores, a
+            futura loja, o Pro Club e se cadastrar para receber novidades do site.
+          </p>
+        </div>
 
-          <div className="about-stack">
-            <article className="detail-card">
-              <h3>Comunidade</h3>
-              <p>Um lugar para reunir publico, parceiros e quem acompanha a marca.</p>
-            </article>
-            <article className="detail-card">
-              <h3>Expansao</h3>
-              <p>Estrutura pronta para receber mais secoes sem perder o layout.</p>
-            </article>
-          </div>
+        <div className="about-cards">
+          <article className="about-card">
+            <span className="section-tag">Comunidade</span>
+            <p>Espaco para aproximar publico, parceiros e quem acompanha a marca.</p>
+          </article>
+          <article className="about-card">
+            <span className="section-tag">Expansao</span>
+            <p>Estrutura pronta para crescer sem perder o visual original do site.</p>
+          </article>
         </div>
       </section>
 
@@ -247,128 +145,155 @@ function HomePage({ onNavigate, onScrollToAbout }) {
   );
 }
 
-function SectionTabs({ onJump }) {
-  return (
-    <div className="section-tabs">
-      <button onClick={() => onJump("edition-one")}>1a edicao</button>
-      <button onClick={() => onJump("edition-two")}>2a edicao</button>
-    </div>
-  );
-}
-
-function SponsorCard({ sponsor }) {
-  return (
-    <a className="sponsor-card" href="/" onClick={(event) => event.preventDefault()}>
-      <div className="sponsor-mark">{sponsor.name.slice(0, 2).toUpperCase()}</div>
-      <div>
-        <span>{sponsor.name}</span>
-        <strong>{sponsor.handle}</strong>
-      </div>
-    </a>
-  );
-}
-
-function EditionSection({ id, kicker, title, description, blocks, sponsors, placeholder = false }) {
-  return (
-    <section className="content-section edition-section" id={id}>
-      <div className="section-heading">
-        <span className="section-kicker">{kicker}</span>
-        <h2>{title}</h2>
-        <p>{description}</p>
-      </div>
-
-      <div className="cup-layout">
-        <div className="details-grid edition-block-grid">
-          {blocks.map((block) => (
-            <article key={`${id}-${block.label}`} className="detail-card">
-              <h3>{block.label}</h3>
-              <p>{block.value}</p>
-            </article>
-          ))}
-        </div>
-
-        <aside className="sponsor-panel">
-          <div className="sponsor-head">
-            <span className="section-kicker">Patrocinadores</span>
-            <h3>{placeholder ? "Espacos reservados" : "Area pronta para links do Instagram"}</h3>
-          </div>
-
-          <div className="sponsor-list">
-            {sponsors.map((sponsor) => (
-              <SponsorCard key={`${id}-${sponsor.name}-${sponsor.handle}`} sponsor={sponsor} />
-            ))}
-          </div>
-        </aside>
-      </div>
-    </section>
-  );
-}
-
 function CupPage() {
-  function jumpTo(id) {
-    const target = document.getElementById(id);
-    if (target) {
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  }
-
   return (
     <>
-      <section className="hero compact-hero">
-        <div className="hero-content">
-          <div className="hero-copy-block">
-            <span className="section-kicker">Meu Pato Cup</span>
-            <h1>As duas edicoes ficam na mesma pagina.</h1>
-            <p className="hero-copy">
-              A pessoa pode rolar normalmente ou usar os botoes para chegar na 1a
-              ou 2a edicao. A estrutura ja fica pronta para premios, sorteios,
-              fotos, patrocinadores e a tabela futura.
-            </p>
-          </div>
+      <section className="hero-panel reveal-section is-visible cup-hero" id="meu-pato-cup">
+        <div className="hero-panel__fx hero-panel__fx--left" aria-hidden="true" />
+        <div className="hero-panel__fx hero-panel__fx--right" aria-hidden="true" />
+        <div className="hero-panel__mesh" aria-hidden="true" />
 
-          <div className="hero-card">
-            <SectionTabs onJump={jumpTo} />
+        <div className="hero-copy">
+          <span className="section-tag">Meu Pato Cup</span>
+          <h1 className="hero-heading">
+            <span>As duas</span>
+            <strong>edicoes</strong>
+          </h1>
+          <p>
+            A navegacao aqui fica na mesma pagina: a pessoa pode descer ou usar os
+            links para ver a 1a e a 2a edicao.
+          </p>
+
+          <div className="hero-buttons">
+            <a className="primary-button" href="#primeira-edicao">
+              1a edicao
+            </a>
+            <a className="secondary-button" href="#segunda-edicao">
+              2a edicao
+            </a>
+          </div>
+        </div>
+
+        <div className="hero-logo">
+          <HeroLogo />
+        </div>
+      </section>
+
+      <section className="content-block first-block reveal-section" data-reveal id="primeira-edicao">
+        <div className="block-copy">
+          <span className="section-tag">1a edicao</span>
+          <h2>Como foi a primeira edicao</h2>
+          <p>
+            A primeira edicao da Meu Pato Cup foi inesquecivel. Mantive a galeria
+            original com imagens e deixei os blocos prontos para voce completar as
+            informacoes reais depois.
+          </p>
+          <a className="outline-button" href="#patrocinadores">
+            Ver patrocinadores
+          </a>
+        </div>
+
+        <div className="gallery-block">
+          <figure className="gallery-large">
+            <img src="/assets/edition-1-a.png" alt="Celebracao da primeira edicao" />
+          </figure>
+          <figure className="gallery-small">
+            <img src="/assets/edition-1-b.png" alt="Arena da Meu Pato Cup" />
+          </figure>
+          <figure className="gallery-small">
+            <img src="/assets/edition-1-c.png" alt="Publico no evento" />
+          </figure>
+        </div>
+      </section>
+
+      <section className="content-block second-block reveal-section" data-reveal id="segunda-edicao">
+        <div className="second-block__media" aria-hidden="true">
+          <div
+            className="second-block__media-item second-block__media-item--a"
+            style={{ backgroundImage: "url('/assets/second-2-a.png')" }}
+          />
+          <div
+            className="second-block__media-item second-block__media-item--b"
+            style={{ backgroundImage: "url('/assets/second-2-b.png')" }}
+          />
+          <div
+            className="second-block__media-item second-block__media-item--c"
+            style={{ backgroundImage: "url('/assets/second-2-c.png')" }}
+          />
+        </div>
+        <div className="second-block__overlay" />
+
+        <div className="second-block__copy">
+          <span className="section-tag">1a edicao</span>
+          <h2>Blocos principais da primeira edicao</h2>
+          <p>
+            Aqui entram premiacoes, sorteios, fotos e tabela da 1a edicao, mas sem
+            mexer na linguagem visual original do site.
+          </p>
+
+          <div className="feature-row">
+            {featureItems.map((item) => (
+              <article key={item.key} className="feature-card">
+                <span className={`feature-icon feature-icon--${item.key}`} />
+                <div>
+                  <strong>{item.label}</strong>
+                  <span>{item.value}</span>
+                </div>
+              </article>
+            ))}
           </div>
         </div>
       </section>
 
-      <EditionSection
-        id="edition-one"
-        kicker="1a edicao"
-        title="Como foi a primeira edicao"
-        description="Bloco principal da 1a edicao com espaco para voce preencher os detalhes reais depois."
-        blocks={firstEditionBlocks}
-        sponsors={firstEditionSponsors}
-      />
+      <section className="content-block second-block reveal-section" data-reveal>
+        <div className="second-block__media second-edition-placeholder" aria-hidden="true" />
+        <div className="second-block__overlay" />
 
-      <EditionSection
-        id="edition-two"
-        kicker="2a edicao"
-        title="O que ja existe da segunda edicao"
-        description="A 2a edicao entra com a estrutura pronta, mas com campos reservados para completar depois."
-        blocks={secondEditionBlocks}
-        sponsors={secondEditionSponsors}
-        placeholder
-      />
+        <div className="second-block__copy">
+          <span className="section-tag">2a edicao</span>
+          <h2>Estrutura pronta, conteudo em branco</h2>
+          <p>
+            A 2a edicao entra preparada para receber informacoes depois, com areas
+            reservadas do jeito que voce pediu.
+          </p>
+
+          <div className="feature-row">
+            {secondEditionItems.map((item) => (
+              <article key={`second-${item.key}`} className="feature-card">
+                <span className={`feature-icon feature-icon--${item.key}`} />
+                <div>
+                  <strong>{item.label}</strong>
+                  <span>{item.value}</span>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <TicketForm cupMode />
     </>
   );
 }
 
 function ComingSoonPage({ kicker, title, description }) {
   return (
-    <section className="hero compact-hero">
-      <div className="hero-content">
-        <div className="hero-copy-block">
-          <span className="section-kicker">{kicker}</span>
-          <h1>Pagina em breve.</h1>
-          <p className="hero-copy">{description}</p>
-        </div>
+    <section className="hero-panel reveal-section is-visible cup-hero">
+      <div className="hero-panel__fx hero-panel__fx--left" aria-hidden="true" />
+      <div className="hero-panel__fx hero-panel__fx--right" aria-hidden="true" />
+      <div className="hero-panel__mesh" aria-hidden="true" />
 
-        <div className="hero-card">
-          <span className="hero-badge">Em breve</span>
-          <h2>{title}</h2>
-          <p>Espaco reservado dentro da mesma identidade visual do site.</p>
-        </div>
+      <div className="hero-copy">
+        <span className="section-tag">{kicker}</span>
+        <h1 className="hero-heading">
+          <span>Pagina</span>
+          <strong>em breve</strong>
+        </h1>
+        <p>{description}</p>
+      </div>
+
+      <div className="hero-logo">
+        <HeroLogo />
       </div>
     </section>
   );
@@ -378,8 +303,65 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState("home");
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  function navigate(pageId) {
-    setCurrentPage(pageId);
+  useEffect(() => {
+    const elements = document.querySelectorAll("[data-reveal]");
+    const hero = document.querySelector(".hero-panel");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.16,
+        rootMargin: "0px 0px -8% 0px"
+      }
+    );
+
+    elements.forEach((element) => observer.observe(element));
+
+    function handlePointerMove(event) {
+      if (!hero) {
+        return;
+      }
+
+      const bounds = hero.getBoundingClientRect();
+      const x = (event.clientX - bounds.left) / bounds.width;
+      const y = (event.clientY - bounds.top) / bounds.height;
+
+      hero.style.setProperty("--hero-mouse-x", `${x}`);
+      hero.style.setProperty("--hero-mouse-y", `${y}`);
+      hero.style.setProperty("--hero-tilt-x", `${(x - 0.5) * 18}px`);
+      hero.style.setProperty("--hero-tilt-y", `${(y - 0.5) * 14}px`);
+    }
+
+    function resetPointer() {
+      if (!hero) {
+        return;
+      }
+
+      hero.style.setProperty("--hero-mouse-x", "0.5");
+      hero.style.setProperty("--hero-mouse-y", "0.5");
+      hero.style.setProperty("--hero-tilt-x", "0px");
+      hero.style.setProperty("--hero-tilt-y", "0px");
+    }
+
+    hero?.addEventListener("pointermove", handlePointerMove);
+    hero?.addEventListener("pointerleave", resetPointer);
+
+    return () => {
+      observer.disconnect();
+      hero?.removeEventListener("pointermove", handlePointerMove);
+      hero?.removeEventListener("pointerleave", resetPointer);
+    };
+  }, [currentPage]);
+
+  function navigate(page) {
+    setCurrentPage(page);
     setMobileOpen(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -387,54 +369,140 @@ export default function App() {
   function scrollToAbout() {
     if (currentPage !== "home") {
       setCurrentPage("home");
-      setMobileOpen(false);
-      requestAnimationFrame(() => {
-        const target = document.getElementById("about");
-        if (target) {
-          target.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
-      });
+      setTimeout(() => {
+        document.getElementById("about")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 50);
       return;
     }
 
-    const target = document.getElementById("about");
-    if (target) {
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+    document.getElementById("about")?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   return (
-    <div className="page-shell">
-      <Header
-        currentPage={currentPage}
-        onNavigate={navigate}
-        mobileOpen={mobileOpen}
-        onToggleMobile={() => setMobileOpen((current) => !current)}
-      />
+    <div className="site-page">
+      <header className="top-header">
+        <div className="top-header__inner">
+          <button className="brand-anchor brand-button" onClick={() => navigate("home")} aria-label="Meu Pato Cup">
+            <HeaderLogo />
+          </button>
 
-      <main>
-        {currentPage === "home" ? (
-          <HomePage onNavigate={navigate} onScrollToAbout={scrollToAbout} />
+          <nav className="main-nav" aria-label="Menu principal">
+            <button className={currentPage === "home" ? "nav-button active" : "nav-button"} onClick={() => navigate("home")}>
+              Home
+            </button>
+            <button className={currentPage === "cup" ? "nav-button active" : "nav-button"} onClick={() => navigate("cup")}>
+              Meu Pato Cup
+            </button>
+            <button className={currentPage === "store" ? "nav-button active" : "nav-button"} onClick={() => navigate("store")}>
+              Loja
+            </button>
+            <button className={currentPage === "proclub" ? "nav-button active" : "nav-button"} onClick={() => navigate("proclub")}>
+              Meu Pato Cup Pro Club
+            </button>
+          </nav>
+
+          <div className="top-header__actions">
+            <button className="ticket-cta" onClick={() => navigate("cup")}>
+              Ver Cup
+            </button>
+            <button className="hamburger" type="button" aria-label="Abrir menu" onClick={() => setMobileOpen((value) => !value)}>
+              <span />
+              <span />
+              <span />
+            </button>
+          </div>
+        </div>
+
+        {mobileOpen ? (
+          <div className="mobile-menu">
+            <button className="mobile-menu__link" onClick={() => navigate("home")}>
+              Home
+            </button>
+            <button className="mobile-menu__link" onClick={() => navigate("cup")}>
+              Meu Pato Cup
+            </button>
+            <button className="mobile-menu__link" onClick={() => navigate("store")}>
+              Loja
+            </button>
+            <button className="mobile-menu__link" onClick={() => navigate("proclub")}>
+              Meu Pato Cup Pro Club
+            </button>
+          </div>
         ) : null}
+      </header>
 
+      <main className="page-sections">
+        {currentPage === "home" ? <HomePage onNavigate={navigate} onScrollToAbout={scrollToAbout} /> : null}
         {currentPage === "cup" ? <CupPage /> : null}
-
         {currentPage === "store" ? (
           <ComingSoonPage
             kicker="Loja"
-            title="Colecao Meu Pato"
-            description="A pagina da loja fica pronta dentro da navegação do site, mas por enquanto entra apenas como em breve."
+            title="Loja"
+            description="A loja vai abrir dentro do mesmo estilo do site. Por enquanto deixei apenas a pagina em breve."
           />
         ) : null}
-
         {currentPage === "proclub" ? (
           <ComingSoonPage
             kicker="Meu Pato Cup Pro Club"
             title="Pro Club"
-            description="A pagina do Pro Club tambem ja entra na estrutura para receber conteudo depois."
+            description="A area do Pro Club tambem fica reservada sem mexer no layout principal do site."
           />
         ) : null}
       </main>
+
+      <footer className="page-footer reveal-section is-visible" id="contato">
+        <div className="page-footer__inner">
+          <div className="page-footer__socials" aria-label="Redes sociais">
+            <a
+              className="page-footer__icon"
+              href="https://www.instagram.com/meupatocup/"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Instagram Meu Pato Cup"
+            >
+              <img src="/assets/icon-instagram.jfif" alt="" />
+            </a>
+            <a
+              className="page-footer__icon"
+              href="https://www.linkedin.com/feed/"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="LinkedIn"
+            >
+              <img src="/assets/icon-linkedin.png" alt="" />
+            </a>
+            <a
+              className="page-footer__icon"
+              href="https://wa.me/5511943944222"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="WhatsApp"
+            >
+              <img src="/assets/icon-whatsapp.png" alt="" />
+            </a>
+          </div>
+
+          <div className="page-footer__links">
+            <button className="footer-link-button" onClick={() => navigate("home")}>
+              Home
+            </button>
+            <button className="footer-link-button" onClick={() => navigate("cup")}>
+              Meu Pato Cup
+            </button>
+            <button className="footer-link-button" onClick={() => navigate("store")}>
+              Loja
+            </button>
+            <button className="footer-link-button" onClick={() => navigate("proclub")}>
+              Pro Club
+            </button>
+          </div>
+
+          <div className="page-footer__meta">
+            <span>Meu Pato</span>
+            <span>Base visual preservada e adaptada</span>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
