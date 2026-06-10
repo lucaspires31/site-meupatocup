@@ -1172,6 +1172,24 @@ button {
     display: none;
   }
 
+  .hero-panel {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    gap: 18px;
+  }
+
+  .hero-logo {
+    justify-content: flex-end;
+  }
+
+  .hero-logo-image {
+    width: min(100%, 240px);
+  }
+
+  .hero-copy p {
+    max-width: 100%;
+  }
+
   .first-block,
   .about-block {
     grid-template-columns: 1fr;
@@ -1183,6 +1201,18 @@ button {
 }
 
 @media (max-width: 699px) {
+  .hero-panel {
+    padding: 18px 12px 20px;
+  }
+
+  .hero-logo-image {
+    width: min(100%, 180px);
+  }
+
+  .hero-buttons {
+    display: grid;
+  }
+
   .page-footer__inner {
     padding: 18px 16px;
   }
