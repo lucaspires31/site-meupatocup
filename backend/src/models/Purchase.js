@@ -7,19 +7,30 @@ const purchaseSchema = new mongoose.Schema(
       required: true,
       trim: true
     },
-    contact: {
+    whatsapp: {
       type: String,
       required: true,
       trim: true
     },
+    email: {
+      type: String,
+      required: true,
+      trim: true,
+      lowercase: true
+    },
+    instagram: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    notifications: {
+      type: [String],
+      default: []
+    },
     paymentStatus: {
       type: String,
-      enum: ["pending", "paid", "failed"],
-      default: "pending"
-    },
-    pixPayload: {
-      type: String,
-      required: true
+      enum: ["pending", "saved", "failed"],
+      default: "saved"
     }
   },
   {
